@@ -1,6 +1,11 @@
 import {Request, Response} from 'express';
 import {getMenus, getMenusById} from '../services/menuService';
 
+/**
+ * Fetch all menus
+ * @param req
+ * @param res
+ */
 export const getMenu = async (req: Request, res: Response) => {
     try {
         const menus = await getMenus();
@@ -11,6 +16,11 @@ export const getMenu = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ * Fetch a menu by menuID
+ * @param req
+ * @param res
+ */
 export const getMenuById = async (req: Request, res: Response) => {
     try {
         const menuId = parseInt(req.params.id, 10);

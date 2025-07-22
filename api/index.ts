@@ -1,6 +1,15 @@
 import express from 'express';
 import dotenv from 'dotenv';
 
+/**
+ * Main entry point for the API server
+ * Uses Express to create a server and load env variables
+ * Routes are imported and mounted here
+ * @module api/index.ts
+ * @author Marianne Peterson
+ * @version 1.0.0
+ * @license MIT
+ */
 // load environment variables from .env
 dotenv.config();
 

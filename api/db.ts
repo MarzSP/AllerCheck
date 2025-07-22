@@ -1,8 +1,14 @@
 import sql from 'mssql';
 import * as dotenv from 'dotenv';
 
+/**
+ * Database connection configuration for SQL Server
+ */
 dotenv.config();
 
+/**
+ * SQL Server connection configuration
+ */
 const config: sql.config = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -15,6 +21,9 @@ const config: sql.config = {
     },
 };
 
+/**
+ * Creates a connection pool to SQL Server
+ */
 export const poolPromise = new sql.ConnectionPool(config)
     .connect()
     .then(pool => {
