@@ -1,13 +1,19 @@
 version: '3.8'
 
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: sqlserver
-    ports:
-      - "1433:1433"
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: unless-stopped
     environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "StrongP@ssw0rd!"
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - "5432:5432"
     volumes:
-      - ./init:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+      - ./models/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  pgdata:

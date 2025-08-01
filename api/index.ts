@@ -1,5 +1,7 @@
-import express from 'express';
 import dotenv from 'dotenv';
+// load environment variables from .env
+dotenv.config();
+import express from 'express';
 
 /**
  * Main entry point for the API server

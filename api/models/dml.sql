@@ -6,18 +6,12 @@ VALUES ('testuser',
         'Beek',
         '12345',
         'Test Country',
-        'hashed_password_example')
+        'hashed_password_example');
 
 INSERT INTO auth (userId, token, expires_at)
 VALUES (1,
         'dummyauthtoken123',
-        DATEADD(day, 7, GETDATE()));
-
-INSERT INTO menu (userId, name, description, isActive)
-VALUES (1,
-        'Test Menu',
-        'This is a test menu for development.',
-        1);
+        CURRENT_TIMESTAMP + INTERVAL '7 days');
 
 INSERT INTO menuItem (menuId, name, description)
 VALUES (1,

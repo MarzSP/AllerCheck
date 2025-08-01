@@ -1,36 +1,20 @@
-import sql from 'mssql';
+import {Pool} from 'pg';
 import * as dotenv from 'dotenv';
 
-/**
- * Database connection configuration for SQL Server
- */
-dotenv.config();
+dotenv.config({path: '../.env'});
 
-/**
- * SQL Server connection configuration
- */
-const config: sql.config = {
+export const pool = new Pool({
     user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    server: process.env.DB_SERVER || 'localhost',
+    host: process.env.DB_SERVER,
     database: process.env.DB_DATABASE,
-    port: parseInt(process.env.DB_PORT || '1433', 10),
-    options: {
-        encrypt: false,
-        trustServerCertificate: true,
-    },
-};
+    password: process.env.DB_PASSWORD,
+    port: parseInt(process.env.DB_PORT || '5432', 10),
+});
 
-/**
- * Creates a connection pool to SQL Server
- */
-export const poolPromise = new sql.ConnectionPool(config)
-    .connect()
-    .then(pool => {
-        console.log('Connected to SQL Server');
-        return pool;
-    })
-    .catch(err => {
-        console.error('Database connection failed', err);
-        throw err;
-    });
+pool.on('connect', () => {
+    console.log('Connected to PostgreSQL');
+});
+
+pool.on('error', (err) => {
+    console.error('PostgreSQL connection error:', err);
+});
