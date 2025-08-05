@@ -18,3 +18,4 @@ pool.on('connect', () => {
 pool.on('error', (err) => {
     console.error('PostgreSQL connection error:', err);
 });
+
