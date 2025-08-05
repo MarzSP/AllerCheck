@@ -1,4 +1,4 @@
-import {getMenudb, getMenuByIddb} from '../models/menuModel';
+import {getMenu, getMenuById} from '../models/menuModel';
 
 /**
  * Service to handle menu-related operations.
@@ -8,7 +8,9 @@ import {getMenudb, getMenuByIddb} from '../models/menuModel';
  * Fetches all menus
  */
 export const getMenus = async () => {
-    return await getMenudb();
+    console.log('Service: getMenus called');
+
+    return await getMenu();
 };
 
 /**
@@ -19,7 +21,7 @@ export const getMenusById = async (menuId: number) => {
     if (isNaN(menuId)) {
         throw new Error('Invalid menu ID');
     }
-    const menu = await getMenuByIddb(menuId);
+    const menu = await getMenuById(menuId);
     if (!menu) {
         throw new Error('Menu not found');
     }

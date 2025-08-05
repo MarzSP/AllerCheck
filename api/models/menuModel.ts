@@ -1,32 +1,38 @@
-import {poolPromise} from '../db';
-
 /**
  * Db operations for the menu table
  * @module menuModel
  */
 
+import {pool} from '../db'; // assuming this exports a 'pg' Pool
 /**
  * Gets all menus
  */
-export const getMenudb = async () => {
-    const pool = await poolPromise;
-    const result = await pool.request().query(`
-        SELECT menuId, userId, name, description, isActive, updated_at, created_at
-        FROM menu
+export const getMenu = async () => {
+    console.log('🗄️  Model: querying all menus');
+    try {
+        const result = await pool.query(`
+            SELECT menuId, userId, name, description, isActive, updated_at, created_at
+            FROM menu
     `);
-    return result.recordset;
+        console.log('Query succeeded, rows:', result.rows.length);
+        return result.rows;
+    } catch (err) {
+        console.error('DB query failed:', err);
+        throw err;
+    }
 };
 
 /**
  * Gets a menu by its menuID
  * @param menuId
  */
-export const getMenuByIddb = async (menuId: number) => {
-    const pool = await poolPromise;
-    const result = await pool.request()
-        .input('menuId', menuId)
-        .query(
-            'SELECT menuId, userId, name, description, isActive, updated_at, created_at FROM menu WHERE menuId = @menuId'
-        );
-    return result.recordset[0];
+export const getMenuById = async (menuId: number) => {
+    const result = await pool.query(
+        `SELECT menuId, userId, name, description, isActive, updated_at, created_at
+         FROM menu
+         WHERE menuId = $1`,
+        [menuId]
+    );
+    return result.rows[0]; // not .recordset!
 };
+

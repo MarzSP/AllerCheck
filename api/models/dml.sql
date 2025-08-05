@@ -30,3 +30,6 @@ INSERT INTO menuItemIngredient (menuItemId, ingredientId)
 VALUES (1, 1),
        (1, 2);
 
+
+
+

@@ -1,8 +1,3 @@
-import dotenv from 'dotenv';
-// load environment variables from .env
-dotenv.config();
-import express from 'express';
-
 /**
  * Main entry point for the API server
  * Uses Express to create a server and load env variables
@@ -12,25 +7,36 @@ import express from 'express';
  * @version 1.0.0
  * @license MIT
  */
-// load environment variables from .env
+import dotenv from 'dotenv';
 dotenv.config();
+
+import express from 'express';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+import path from 'path';
+
+import menuRouter from './routes/menuRouter';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// middleware to parse JSON bodies
+// Middleware
+app.use(morgan('dev'));
 app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+app.use(cookieParser());
 
-// example root route
-app.get('/', (_req, res) => {
-    res.send('API is running ');
-});
+// Optional: serve static files from /public
+app.use(express.static(path.join(__dirname, 'public')));
 
-// import and mount your routes
-import menuRouter from './routes/menuRouter';
-
+// Routes
 app.use('/api/menu', menuRouter);
 
+app.get('/ping', (_req, res) => {
+    console.log('PING received');
+    res.json({message: 'pong'});
+});
+
 app.listen(PORT, () => {
-    console.log(`Backend server running at http://localhost:${PORT}`);
+    console.log(`✅ Backend server running at http://localhost:${PORT}`);
 });

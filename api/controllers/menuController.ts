@@ -8,6 +8,7 @@ import {getMenus, getMenusById} from '../services/menuService';
  */
 export const getMenu = async (req: Request, res: Response) => {
     try {
+        console.log('Controller: getMenu called');
         const menus = await getMenus();
         res.json(menus);
     } catch (err) {
