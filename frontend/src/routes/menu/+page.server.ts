@@ -1,5 +1,8 @@
 import type {Actions} from './$types';
 
+/**
+ * This file handles the server-side logic for creating a new menu item
+ */
 export const actions: Actions = {
     create: async ({request, fetch}) => {
         const form = await request.formData();

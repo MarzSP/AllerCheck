@@ -1,6 +1,11 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
+/**
+ * Vite configuration for the SvelteKit frontend
+ * This configuration sets up the dev server
+ * and proxies API requests to the Node backend
+ */
 export default defineConfig({
 	plugins: [sveltekit()],
 	server: {

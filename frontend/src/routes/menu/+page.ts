@@ -1,5 +1,9 @@
 import type {PageLoad} from './$types';
 
+/**
+ * This file is used to load the menu data for the page
+ * @Type {Menu}
+ */
 type Menu = {
     menuId: number;
     name: string;
@@ -7,6 +11,10 @@ type Menu = {
     isActive: boolean;
 };
 
+/**
+ * Load function for the menu page
+ * @param fetch
+ */
 export const load: PageLoad = async ({fetch}) => {
     // Use the proxy: just call /api/menu
     const res = await fetch('/api/menu');

@@ -1,3 +1,8 @@
+<!--
+  Palette Demo - Svelte Component
+  This component showcases a dynamic theme switcher and a sample menu with allergen tags.
+  It uses CSS variables for theming and provides a clean, modern UI.
+-->
 <script lang="ts">
     import {onMount} from "svelte";
     import {browser} from "\$app/environment";
