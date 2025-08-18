@@ -13,12 +13,21 @@ dotenv.config();
 import express from 'express';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
-import path from 'path';
+import * as path from 'path';
+import cors from 'cors';
 
 import menuRouter from './routes/menuRouter';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
+
+// CORS - Vite dev server
+app.use(
+    cors({
+        origin: ['http://localhost:5173'],
+        credentials: true,
+    })
+);
 
 // Middleware
 app.use(morgan('dev'));
@@ -26,7 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 
-// Optional: serve static files from /public
+//serve static files from /public
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
@@ -38,5 +47,5 @@ app.get('/ping', (_req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`✅ Backend server running at http://localhost:${PORT}`);
+    console.log(`Backend server listening on port ${PORT}`);
 });

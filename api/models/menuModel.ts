@@ -3,7 +3,7 @@
  * @module menuModel
  */
 
-import {pool} from '../db'; // assuming this exports a 'pg' Pool
+import {pool} from '../db';
 /**
  * Gets all menus
  */

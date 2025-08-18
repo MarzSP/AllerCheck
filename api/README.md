@@ -20,7 +20,7 @@ The backend is structured into three main layers:
 - **Language**: Typescript, T-SQL
 - **Framework**: Express
 - **Database**: SQL Server
-- **Tools**: Docker
+- **Tools**: Docker, Cors, Helmet, Morgan,
 
 ## Development Setup
 
