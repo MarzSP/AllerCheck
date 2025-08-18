@@ -22,7 +22,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
     ports:
-      - "3000:3000"
+      - "3001:3000"
     depends_on:
       - postgres
     volumes:
@@ -30,13 +30,13 @@ services:
       - /app/node_modules
     env_file:
       - ./.env
-    command: sh -c "npm ci || npm install && npm run dev"
+    command: sh -c "npm install --include=dev && npm run dev"
 
   frontend:
     build: ./frontend
     restart: unless-stopped
     environment:
-      VITE_API_URL: http://localhost:3000
+      VITE_API_URL: http://localhost:3001
     ports:
       - "5173:5173"
     depends_on:
@@ -45,8 +45,6 @@ services:
       - ./frontend:/app
       - /app/node_modules
     command: sh -c "npm ci || npm install && npm run dev -- --host"
-    # Vite needs --host so it binds to 0.0.0.0 inside the container
-    # and is accessible on localhost:5173
 
 volumes:
   pgdata:
