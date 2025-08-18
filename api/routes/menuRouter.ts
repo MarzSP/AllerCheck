@@ -2,7 +2,7 @@ import {Router} from 'express';
 import {getMenu, getMenuById} from '../controllers/menuController';
 
 /**
- * Menu Router
+ * Menu.ts Router
  */
 const router = Router();
 console.log('📦 Router loaded');

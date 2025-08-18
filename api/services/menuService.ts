@@ -1,29 +1,29 @@
-import {getMenu, getMenuById} from '../models/menuModel';
+// src/services/MenuService.ts
+import type {IMenuService} from "./iMenuService";
+import type {IMenuRepository} from "../repositories/iMenuRepository";
+import type {Menu} from "../model/Menu";
 
 /**
- * Service to handle menu-related operations.
+ * Handles menu-related operations.
  */
-
-/**
- * Fetches all menus
- */
-export const getMenus = async () => {
-    console.log('Service: getMenus called');
-
-    return await getMenu();
-};
-
-/**
- * Fetches a menu by its menuID
- * @param menuId
- */
-export const getMenusById = async (menuId: number) => {
-    if (isNaN(menuId)) {
-        throw new Error('Invalid menu ID');
+export class MenuService implements IMenuService {
+    constructor(private repo: IMenuRepository) {
     }
-    const menu = await getMenuById(menuId);
-    if (!menu) {
-        throw new Error('Menu not found');
+
+    async getMenus(): Promise<Menu[]> {
+        console.log("Service: getMenus called");
+        return this.repo.getMenu();
     }
-    return menu;
-};
+
+    async getMenusById(menuId: number): Promise<Menu> {
+        if (isNaN(menuId)) {
+            throw new Error("Invalid menu ID");
+        }
+
+        const menu = await this.repo.getMenuById(menuId);
+        if (!menu) {
+            throw new Error("Menu not found");
+        }
+        return menu;
+    }
+}

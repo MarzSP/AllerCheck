@@ -1,41 +1,42 @@
-import {Request, Response} from 'express';
-import {getMenus, getMenusById} from '../services/menuService';
+import {Request, Response} from "express";
+import {MenuRepository} from "../repositories/menuRepository";
+import {MenuService} from "../services/menuService";
+
+// repo + service (could move to a DI container later)
+const repo = new MenuRepository();
+const service = new MenuService(repo);
 
 /**
  * Fetch all menus
- * @param req
- * @param res
  */
 export const getMenu = async (req: Request, res: Response) => {
     try {
-        console.log('Controller: getMenu called');
-        const menus = await getMenus();
+        console.log("Controller: getMenu called");
+        const menus = await service.getMenus(); // <-- call instance method
         res.json(menus);
     } catch (err) {
         console.error(err);
-        res.status(500).json({error: 'Failed to fetch menus'});
+        res.status(500).json({error: "Failed to fetch menus"});
     }
 };
 
 /**
  * Fetch a menu by menuID
- * @param req
- * @param res
  */
 export const getMenuById = async (req: Request, res: Response) => {
     try {
         const menuId = parseInt(req.params.id, 10);
 
-        const menu = await getMenusById(menuId);
+        const menu = await service.getMenusById(menuId); // <-- call instance method
         res.json(menu);
     } catch (err) {
         console.error(err);
-        if (err instanceof Error && err.message === 'Invalid menu ID') {
+        if (err instanceof Error && err.message === "Invalid menu ID") {
             return res.status(400).json({error: err.message});
         }
-        if (err instanceof Error && err.message === 'Menu not found') {
+        if (err instanceof Error && err.message === "Menu not found") {
             return res.status(404).json({error: err.message});
         }
-        res.status(500).json({error: 'Failed to fetch menu'});
+        res.status(500).json({error: "Failed to fetch menu"});
     }
 };
