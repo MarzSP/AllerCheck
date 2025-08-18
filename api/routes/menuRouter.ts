@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getMenu, getMenuById} from '../controllers/menuController';
+import {getMenu, getMenusById} from '../controllers/menuController';
 
 /**
  * Menu.ts Router
@@ -7,6 +7,6 @@ import {getMenu, getMenuById} from '../controllers/menuController';
 const router = Router();
 console.log('📦 Router loaded');
 router.get('/', getMenu);
-router.get('/:id', getMenuById);
+router.get('/:id', getMenusById);
 
 export default router;
