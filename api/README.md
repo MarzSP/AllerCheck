@@ -4,6 +4,9 @@
 
 N-Tier Architecture / Controller-Service-Repository Pattern CSR
 
+- Clean Architecture: hexagonal architecture
+  Interfaces are ports (Dependency Inversion/Dependency Injection), and implementations are adapters.
+
 The backend is structured into three main layers:
 
 1. **Controller Layer**: This layer handles incoming HTTP requests and routes them to the appropriate service methods.
@@ -20,7 +23,7 @@ The backend is structured into three main layers:
 - **Language**: Typescript, T-SQL
 - **Framework**: Express
 - **Database**: SQL Server
-- **Tools**: Docker, Cors, Helmet, Morgan,
+- **Tools**: Docker, Cors, Helmet, Morgan,dotenv
 
 ## Development Setup
 
