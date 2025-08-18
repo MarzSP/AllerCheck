@@ -1,18 +1,15 @@
 import {Request, Response} from "express";
-import {MenuRepository} from "../repositories/menuRepository";
-import {MenuService} from "../services/menuService";
+import {menuService} from "../services/menuService";
 
-// repo + service (could move to a DI container later)
-const repo = new MenuRepository();
-const service = new MenuService(repo);
-
-/**
- * Fetch all menus
+/** Controller for handling menu-related requests.
+ * This controller interacts with the menuService to perform operations
+ * @param _req
+ * @param res
  */
-export const getMenu = async (req: Request, res: Response) => {
+
+export const getMenu = async (_req: Request, res: Response) => {
     try {
-        console.log("Controller: getMenu called");
-        const menus = await service.getMenus(); // <-- call instance method
+        const menus = await menuService.getMenus();
         res.json(menus);
     } catch (err) {
         console.error(err);
@@ -20,23 +17,14 @@ export const getMenu = async (req: Request, res: Response) => {
     }
 };
 
-/**
- * Fetch a menu by menuID
- */
-export const getMenuById = async (req: Request, res: Response) => {
+export const getMenusById = async (req: Request, res: Response) => {
     try {
-        const menuId = parseInt(req.params.id, 10);
-
-        const menu = await service.getMenusById(menuId); // <-- call instance method
+        const id = Number(req.params.id);
+        const menu = await menuService.getMenusById(id);
         res.json(menu);
-    } catch (err) {
-        console.error(err);
-        if (err instanceof Error && err.message === "Invalid menu ID") {
-            return res.status(400).json({error: err.message});
-        }
-        if (err instanceof Error && err.message === "Menu not found") {
-            return res.status(404).json({error: err.message});
-        }
+    } catch (err: any) {
+        if (err?.message === "Invalid menu ID") return res.status(400).json({error: err.message});
+        if (err?.message === "Menu not found") return res.status(404).json({error: err.message});
         res.status(500).json({error: "Failed to fetch menu"});
     }
 };
