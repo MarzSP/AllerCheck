@@ -1,4 +1,4 @@
-export interface Ingredient {
+export type Ingredient = {
     ingredientId: number;
     name: string;
     description: string | null;

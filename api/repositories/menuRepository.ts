@@ -1,6 +1,6 @@
 // repositories/MenuRepository.ts
 import {pool} from '../db';
-import {Menu} from "../model/Menu";
+import {Menu} from "../types/Menu";
 
 /**
  * Postgres implementation of IMenuRepository
@@ -12,19 +12,19 @@ export class MenuRepository {
      * Executes SELECT query to fetch all menus.
      * @returns Array of menu rows (raw DB objects)
      */
-    async getMenu() {
-        console.log('Model: querying all menus');
-        try {
-            const result = await pool.query(`
-                SELECT menuId, userId, name, description, isActive, updated_at, created_at
-                FROM menu
-            `);
-            console.log('Query succeeded, rows:', result.rows.length);
-            return result.rows;
-        } catch (err) {
-            console.error('DB query failed:', err);
-            throw err;
-        }
+    async getMenusByUserId(userId: number): Promise<Menu[]> {
+        const {rows} = await pool.query<Menu>(`
+            SELECT menu_id    AS "menuId",
+                   user_id    AS "userId",
+                   name,
+                   description,
+                   is_active  AS "isActive",
+                   updated_at AS "updatedAt",
+                   created_at AS "createdAt"
+            FROM menu
+            WHERE user_id = $1
+        `, [userId]);
+        return rows;
     }
 
     /**

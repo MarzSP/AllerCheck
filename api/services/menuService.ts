@@ -1,5 +1,8 @@
-import type {Menu} from "../model/Menu";
-import {menuRepository, MenuRepository} from "../repositories/menuRepository";
+import {ensureId, validateName, validateDescription} from "../utils/validation";
+import type {CreateMenuDTO, UpdateMenuDTO} from "../types/DTO/MenuDTO";
+import type {Menu} from "../types/Menu";
+import {MenuRepository, menuRepository} from "../repositories/menuRepository";
+import {NotFoundError} from "../utils/errors";
 
 /**
  * Service that handles menu-related operations.
@@ -9,66 +12,55 @@ export class MenuService {
     constructor(private readonly repo: MenuRepository = menuRepository) {
     }
 
-    async getMenus() {
-        return this.repo.getMenu();
+    async getMenusForUser(userId: number): Promise<Menu[]> {
+        ensureId(userId, "userId");
+        return this.repo.getMenusByUserId(userId);
     }
 
-    async getMenusById(menuId: number) {
-        if (!Number.isInteger(menuId) || menuId <= 0) throw new Error("Invalid menu ID");
+    async getMenuById(menuId: number): Promise<Menu> {
+        ensureId(menuId, "menuId");
         const menu = await this.repo.getMenuById(menuId);
-        if (!menu) throw new Error("Menu not found");
+        if (!menu) throw new NotFoundError("Menu not found");
         return menu;
     }
 
-    /*
     async create(data: CreateMenuDTO): Promise<Menu> {
-        this.ensureId(data.userId, "userId");
-        this.validateName(data.name);
-        this.validateDescription(data.description);
+        ensureId(data.userId, "userId");
+        const name = validateName(data.name);
+        const description = validateDescription(data.description);
+
         return this.repo.create({
             userId: data.userId,
-            name: data.name,
-            description: data.description ?? null,
+            name,
+            description,
             isActive: data.isActive ?? true,
         });
     }
 
     async update(menuId: number, patch: UpdateMenuDTO): Promise<Menu> {
-        this.ensureId(menuId, "menuId");
-        if (patch.name !== undefined) this.validateName(patch.name);
-        if (patch.description !== undefined) this.validateDescription(patch.description);
+        ensureId(menuId, "menuId");
 
-        const updated = await this.repo.update(menuId, patch);
-        if (!updated) throw new Error("Menu not found");
+        const name =
+            patch.name !== undefined ? validateName(patch.name) : undefined;
+        const description =
+            patch.description !== undefined ? validateDescription(patch.description) : undefined;
+
+        const updated = await this.repo.update(menuId, {
+            name,
+            description,
+            isActive: patch.isActive,
+        });
+
+        if (!updated) throw new NotFoundError("Menu not found");
         return updated;
     }
 
     async delete(menuId: number): Promise<void> {
-        this.ensureId(menuId, "menuId");
+        ensureId(menuId, "menuId");
+        const existing = await this.repo.getMenuById(menuId);
+        if (!existing) throw new NotFoundError("Menu not found");
         await this.repo.delete(menuId);
     }
-
-    async setActive(menuId: number, isActive: boolean): Promise<Menu> {
-        this.ensureId(menuId, "menuId");
-        const updated = await this.repo.update(menuId, { isActive });
-        if (!updated) throw new Error("Menu not found");
-        return updated;
-    }
-
-    // ---- helpers ----
-    private ensureId(n: number, label: string) {
-        if (!Number.isInteger(n) || n <= 0) throw new Error(`Invalid ${label}`);
-    }
-    private validateName(name?: string) {
-        if (name === undefined) return;
-        const trimmed = name.trim();
-        if (!trimmed) throw new Error("Name is required");
-        if (trimmed.length > 100) throw new Error("Name must be ≤ 100 chars");
-    }
-    private validateDescription(desc?: string | null) {
-        if (desc == null) return;
-        if (desc.length > 255) throw new Error("Description must be ≤ 255 chars");
-    }*/
 }
 
 export const menuService = new MenuService();

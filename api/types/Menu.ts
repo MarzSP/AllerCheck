@@ -1,7 +1,7 @@
 /**
  *  Domain model for Menu
  */
-export interface Menu {
+export type Menu = {
     menuId: number;
     userId: number;
     name: string;
