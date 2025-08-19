@@ -1,4 +1,4 @@
-import type {Request, Response, NextFunction} from "express";
+import type {Request, Response} from "express";
 import {menuService} from "../services/menuService";
 import {handleError} from "../utils/errors";
 
