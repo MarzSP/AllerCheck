@@ -13,7 +13,8 @@ export class IngredientRepository {
                    description,
                    is_active     AS "isActive",
                    updated_at    AS "updatedAt",
-                   created_at    AS "createdAt"
+                   created_at AS "createdAt",
+                   image_url  AS "imageUrl"
             FROM ingredient
             ORDER BY name ASC
         `);
@@ -30,7 +31,8 @@ export class IngredientRepository {
                    description,
                    is_active     AS "isActive",
                    updated_at    AS "updatedAt",
-                   created_at    AS "createdAt"
+                   created_at AS "createdAt",
+                   image_url  AS "imageUrl"
             FROM ingredient
             WHERE ingredient_id = $1
         `, [ingredientId]);
@@ -40,16 +42,22 @@ export class IngredientRepository {
     /**
      * Insert a new ingredient
      */
-    async insert(data: Pick<Ingredient, "name" | "description" | "isActive" | "imageUrl">): Promise<Ingredient> {
+    async insert(data: {
+        name: string;
+        description: string | null;
+        isActive: boolean;
+        imageUrl: undefined
+    }): Promise<Ingredient> {
         const {rows} = await pool.query<Ingredient>(`
-            INSERT INTO ingredient (name, description, is_active)
+            INSERT INTO ingredient (name, description, is_active, image_url)
             VALUES ($1, $2, COALESCE($3, TRUE), $4)
             RETURNING ingredient_id AS "ingredientId",
                 name,
                 description,
                 is_active AS "isActive",
                 updated_at AS "updatedAt",
-                created_at AS "createdAt"
+                created_at AS "createdAt",
+                image_url AS "imageUrl"
         `, [data.name, data.description ?? null, data.isActive ?? true, data.imageUrl ?? null]);
         return rows[0];
     }
