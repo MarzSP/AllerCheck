@@ -1,41 +1,77 @@
-import {Request, Response} from 'express';
-import {getMenus, getMenusById} from '../services/menuService';
+import type {Request, Response} from "express";
+import {menuService} from "../services/menuService";
+import {handleError} from "../utils/errors";
 
 /**
- * Fetch all menus
+ * GET /api/menus/:id
  * @param req
  * @param res
  */
-export const getMenu = async (req: Request, res: Response) => {
+export async function listMenusForUser(req: Request, res: Response) {
     try {
-        console.log('Controller: getMenu called');
-        const menus = await getMenus();
-        res.json(menus);
+        const userId = Number(req.params.userId);
+        const data = await menuService.getMenusForUser(userId);
+        res.json(data);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({error: 'Failed to fetch menus'});
+        handleError(err, res);
     }
-};
+}
 
 /**
- * Fetch a menu by menuID
+ * GET  /api/menus/:id
  * @param req
  * @param res
  */
 export const getMenuById = async (req: Request, res: Response) => {
     try {
-        const menuId = parseInt(req.params.id, 10);
-
-        const menu = await getMenusById(menuId);
-        res.json(menu);
+        const id = Number(req.params.id);
+        const data = await menuService.getMenuById(id);
+        res.json(data);
     } catch (err) {
-        console.error(err);
-        if (err instanceof Error && err.message === 'Invalid menu ID') {
-            return res.status(400).json({error: err.message});
-        }
-        if (err instanceof Error && err.message === 'Menu not found') {
-            return res.status(404).json({error: err.message});
-        }
-        res.status(500).json({error: 'Failed to fetch menu'});
+        handleError(err, res);
     }
-};
+}
+
+/**
+ * POST /api/menu
+ * @param req
+ * @param res
+ */
+export async function createMenu(req: Request, res: Response) {
+    try {
+        const data = await menuService.create(req.body);
+        res.status(201).json(data);
+    } catch (err) {
+        handleError(err, res);
+    }
+}
+
+/**
+ * PUT /api/menu/:id
+ * @param req
+ * @param res
+ */
+export async function updateMenu(req: Request, res: Response) {
+    try {
+        const id = Number(req.params.id);
+        const data = await menuService.update(id, req.body);
+        res.json(data);
+    } catch (err) {
+        handleError(err, res);
+    }
+}
+
+/**
+ * DELETE /api/menu/:id
+ * @param req
+ * @param res
+ */
+export async function deleteMenu(req: Request, res: Response) {
+    try {
+        const id = Number(req.params.id);
+        await menuService.delete(id);
+        res.status(204).send();
+    } catch (err) {
+        handleError(err, res);
+    }
+}
