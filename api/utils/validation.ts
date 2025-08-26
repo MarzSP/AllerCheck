@@ -42,7 +42,6 @@ export function validateDescription(desc: unknown): string | null {
     return trimmed;
 }
 
-
 /** Asserts a positive integer id. Returns the id to enable chaining. */
 export function ensureId(id: unknown, field = "id"): number {
     if (typeof id !== "number" || !Number.isInteger(id) || id <= 0) {
