@@ -5,6 +5,4 @@ export type Ingredient = {
     isActive: boolean;
     updatedAt: Date;
     createdAt: Date;
-    userId: number;
-    imageUrl?: string | null; // Optional field for image URL
 }
