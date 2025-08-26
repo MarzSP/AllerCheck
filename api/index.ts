@@ -8,6 +8,7 @@
  * @license MIT
  */
 import dotenv from 'dotenv';
+import {logger} from './utils/logger';
 dotenv.config();
 
 import express from 'express';
@@ -42,10 +43,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/menu', menuRouter);
 
 app.get('/ping', (_req, res) => {
-    console.log('PING received');
+    logger.debug("PING received");
     res.json({message: 'pong'});
 });
 
 app.listen(PORT, () => {
-    console.log(`Backend server listening on port ${PORT}`);
+    logger.info(`Backend server listening on port ${PORT}`);
+
 });

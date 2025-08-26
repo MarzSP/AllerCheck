@@ -1,4 +1,5 @@
 import {Response} from "express";
+import {logger} from "./logger";
 
 /** Base HTTP-style error with status code */
 export class HttpError extends Error {
@@ -36,9 +37,10 @@ export class NotFoundError extends Error {
  */
 export function handleError(err: unknown, res: Response) {
     if (err instanceof HttpError) {
+        logger.warn(`HttpError ${err.status}: ${err.message}`);
         return res.status(err.status).json({error: err.message});
     }
 
-    console.error("Unexpected error:", err);
+    logger.error("Unexpected non-Error thrown", {err});
     return res.status(500).json({error: "Internal Server Error"});
 }
