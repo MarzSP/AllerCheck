@@ -9,7 +9,7 @@ import {Menu} from "../types/Menu";
 export class MenuRepository {
 
     /**
-     * Executes SELECT query to fetch all menus.
+     * Fetch all menus
      * @returns Array of menu rows (raw DB objects)
      */
     async getMenusByUserId(userId: number): Promise<Menu[]> {
