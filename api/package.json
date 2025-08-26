@@ -5,7 +5,12 @@
   "scripts": {
     "dev": "ts-node index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:unit": "vitest --include 'tests/unit/**/*.test.ts'",
+    "test:integration": "vitest --include 'tests/integration/**/*.test.ts'",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
